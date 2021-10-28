@@ -37,7 +37,7 @@ const[user,setUser]=useState(null);
               )}
             />
           </div>
-          {watch("name")&&}
+          {/* {watch("name")&&} */}
           {/* Q2 */}
           <div>
             <label htmlFor="birth">
