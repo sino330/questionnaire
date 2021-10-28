@@ -1,13 +1,24 @@
-import { useForm,Controller } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import Container from "@material-ui/core/Container";
 import Input from "@material-ui/core/Input";
+import firebase from "../config/firebase"
+import { useState } from "react";
+import {getAuth} from "firebase/auth"
 
 export default function Home() {
-  const { register, handleSubmit,formState:{errors},control } = useForm();
-
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    control,
+    watch,
+  } = useForm();
+  console.log("isLearning:"+watch("name"));
   const onSubmit = (data) => {
     console.log(data);
   };
+
+const[user,setUser]=useState(null);
 
   return (
     <>
@@ -26,6 +37,7 @@ export default function Home() {
               )}
             />
           </div>
+          {watch("name")&&}
           {/* Q2 */}
           <div>
             <label htmlFor="birth">
@@ -35,8 +47,15 @@ export default function Home() {
               name="birth"
               defaultValue=""
               control={control}
-              rules={{required: true,maxLength: 8,minLength: 8,pattern: /\d{4}\d{2}\d{2}/}}
-              render={({field:{value,onChange}})=><Input value={value} onChange={onChange} />}
+              rules={{
+                required: true,
+                maxLength: 8,
+                minLength: 8,
+                pattern: /\d{4}\d{2}\d{2}/,
+              }}
+              render={({ field: { value, onChange } }) => (
+                <Input value={value} onChange={onChange} />
+              )}
             />
             {errors.birth && errors.birth.type === "required" ? (
               <span>※this is required.</span>
@@ -63,7 +82,7 @@ export default function Home() {
               type="radio"
               value="false"
             />
-            <label htmlFor="isLearning">わからない</label>
+            <label htmlFor="isLearning">いいえ</label>
             <input
               id="isLearning3"
               {...register("isLearning", { required: true })}
@@ -73,6 +92,20 @@ export default function Home() {
             />
             <label htmlFor="isLearning">わからない</label>
             {errors.isLearning && <span>※this is required.</span>}
+            {watch("isLearning") === "true" && (
+              <>
+                <p>
+                  今まで学習したことのあるプログラミング言語をすべて教えてください。
+                </p>
+                <select {...register("isLearnProgramming")}>
+                  <option value="null"></option>
+                  <option value="javascript">javascript</option>
+                  <option value="java">java</option>
+                  <option value="php">php</option>
+                  <option value="python">python</option>
+                </select>
+              </>
+            )}
           </div>
           {/* Q4 */}
           <div>
@@ -102,6 +135,20 @@ export default function Home() {
             />
             <label htmlFor="wasLearning">わからない</label>
             {errors.wasLearning && <span>※this is required.</span>}
+            {watch("wasLearning") === "true" && (
+              <>
+                <p>
+                  現在学習したことのあるプログラミング言語をすべて教えてください。
+                </p>
+                <select {...register("wasLearnProgramming")}>
+                  <option value="null"></option>
+                  <option value="javascript">javascript</option>
+                  <option value="java">java</option>
+                  <option value="php">php</option>
+                  <option value="python">python</option>
+                </select>
+              </>
+            )}
           </div>
           <input type="submit" value="アンケートを提出する" />
         </form>
